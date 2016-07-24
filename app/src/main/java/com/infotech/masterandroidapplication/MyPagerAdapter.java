@@ -5,6 +5,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import com.infotech.masterandroidapplication.fragments.ContactFragment;
+import com.infotech.masterandroidapplication.fragments.ContactListFragment;
 import com.infotech.masterandroidapplication.fragments.ListFragment;
 import com.infotech.masterandroidapplication.fragments.SettingsFragment;
 
@@ -23,7 +24,7 @@ public class MyPagerAdapter extends FragmentPagerAdapter {
             case 0:
                 return new ListFragment();
             case 1:
-                return new ContactFragment();
+                return new ContactListFragment();
             case 2:
                 return new SettingsFragment();
             default:

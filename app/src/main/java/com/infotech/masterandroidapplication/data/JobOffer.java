@@ -1,17 +1,36 @@
 package com.infotech.masterandroidapplication.data;
 
-import com.parse.ParseClassName;
-import com.parse.ParseObject;
+import com.google.firebase.database.IgnoreExtraProperties;
 
 /**
  * Created by youshengchang on 7/9/16.
  */
-@ParseClassName("JobOffer")
-public class JobOffer extends ParseObject{
+@IgnoreExtraProperties
+public class JobOffer{
+
+    public String title;
+    public String description;
+    public String type;
+    public String salary;
+    public String company;
+    public String imageLocation;
+    public String location;
+
     public JobOffer() {
         // A default constructor is required.
     }
 
+    public JobOffer(String title, String description, String type, String salary, String company, String imageLocation, String location) {
+        this.title = title;
+        this.description = description;
+        this.type = type;
+        this.salary = salary;
+        this.company = company;
+        this.imageLocation = imageLocation;
+        this.location = location;
+    }
+
+    /*
     public String getTitle() {
         return getString("title");
     }
@@ -67,6 +86,6 @@ public class JobOffer extends ParseObject{
     public void setLocation(String company) {
         put("company", company);
     }
-
+    */
 
 }

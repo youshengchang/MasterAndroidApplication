@@ -2,61 +2,116 @@ package com.infotech.masterandroidapplication.fragments;
 
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import android.support.annotation.Nullable;
+import android.support.v4.app.*;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.infotech.masterandroidapplication.R;
+import com.infotech.masterandroidapplication.adapters.JobContactsAdapter;
+import com.infotech.masterandroidapplication.data.Country;
+import com.infotech.masterandroidapplication.data.JobContact;
 import com.infotech.masterandroidapplication.data.JobOffer;
+import com.infotech.masterandroidapplication.viewholders.CompanyViewHolder;
+import com.parse.FindCallback;
+import com.parse.ParseException;
 import com.parse.ParseObject;
+import com.parse.ParseQuery;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ContactFragment extends Fragment {
+public class ContactFragment extends android.support.v4.app.Fragment {
 
+    List<Object> mListItems;
+    private DatabaseReference mDatabase;
+    private RecyclerView mRecycler;
+    private LinearLayoutManager mManager;
+    private FirebaseRecyclerAdapter<JobContact, CompanyViewHolder> mAdapter;
 
     public ContactFragment() {
         // Required empty public constructor
     }
 
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        super.onCreateView(inflater, container, savedInstanceState);
+
+        View view = inflater.inflate(R.layout.fragment_contact, null);
+
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+        mRecycler = (RecyclerView)view.findViewById(R.id.job_contact_view);
+        mRecycler.setHasFixedSize(true);
+
+        return view;
+
+    }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_contact, container, false);
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        mManager = new LinearLayoutManager(getActivity());
+        mManager.setReverseLayout(true);
+        mManager.setStackFromEnd(true);
+        mRecycler.setLayoutManager(mManager);
 
-        view.findViewById(R.id.addJoboffer).setOnClickListener(new View.OnClickListener() {
+        Query query = getQuery(mDatabase);
+
+
+        query.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onClick(View view) {
-                Log.i("JOBOFFER", "JobOffer");
+            public void onDataChange(DataSnapshot dataSnapshot) {
 
-                JobOffer jobOffer = new JobOffer();
-                jobOffer.setTitle("Software Developer");
-                jobOffer.setDescription("Develope Spring Framework");
-                jobOffer.setCompany("Infotech Inc.");
-                jobOffer.setType("Contractor");
-                jobOffer.setImageLink("http://infotech.com/resource/compang.jpg");
-                jobOffer.setLocation("san Francisco CA");
-                jobOffer.setSalary("100.00/per Hour");
-                /*
-                jobOffer.put("title", "Android Contract");
-                jobOffer.put("description", "6 months rolling    contract. /n The client" +
-                        "is a worldwide known digital agency");
-                jobOffer.put("type", "Contract");
-                jobOffer.put("salary", "450 GBP/day");
-                jobOffer.put("company", "Recruiters LTD");
-                jobOffer.put("imageLink", "http://infotech/res/recruitersLTD_logo.png");
-                jobOffer.put("location","Reading, UK");
-                */
-                jobOffer.saveInBackground();
+                Log.i("JOB", "onDataChange called.");
+                Log.i("JOB", dataSnapshot.toString());
+                Log.i("JOB", dataSnapshot.getChildrenCount() +"");
+                for(DataSnapshot child: dataSnapshot.getChildren()){
+                    Log.i("JOB", child.toString());
+                    JobContact contact = (JobContact) child.getValue(JobContact.class);
+                    Log.i("JOB", contact.toString());
+                }
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
             }
         });
 
-        return view;
+        mAdapter = new FirebaseRecyclerAdapter<JobContact, CompanyViewHolder>(JobContact.class, R.layout.row_job_contact, CompanyViewHolder.class, query) {
+            @Override
+            protected void populateViewHolder(CompanyViewHolder viewHolder, JobContact model, int position) {
+                viewHolder.bindToJobContact(model);
+            }
+        };
+
+        mRecycler.setAdapter(mAdapter);
+
+    }
+
+
+
+    private Query getQuery(DatabaseReference databaseReference) {
+
+        Query query;
+        query = databaseReference.child("JobContact");
+        return query;
     }
 
 

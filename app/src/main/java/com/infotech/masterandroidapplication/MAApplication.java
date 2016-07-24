@@ -18,8 +18,8 @@ public class MAApplication extends Application {
         // Enable Local Datastore.
 
 
-        ParseObject.registerSubclass(JobOffer.class);
+        //ParseObject.registerSubclass(JobOffer.class);
 
-        Parse.initialize(this, "gZYZHR9m5fE8cTzFhh9xL6ItvBXSiIHPCvWXFbYS", "L0a2Ur4D59Kq0LpmbHhJnFLKmLTA6QcJYrZhjHt7");
+        //Parse.initialize(this, "gZYZHR9m5fE8cTzFhh9xL6ItvBXSiIHPCvWXFbYS", "L0a2Ur4D59Kq0LpmbHhJnFLKmLTA6QcJYrZhjHt7");
     }
 }
