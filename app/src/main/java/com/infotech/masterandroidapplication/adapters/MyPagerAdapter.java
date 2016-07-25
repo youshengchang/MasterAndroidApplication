@@ -1,4 +1,4 @@
-package com.infotech.masterandroidapplication;
+package com.infotech.masterandroidapplication.adapters;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
