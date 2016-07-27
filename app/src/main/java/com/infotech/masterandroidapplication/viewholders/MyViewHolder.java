@@ -27,4 +27,6 @@ public class MyViewHolder extends RecyclerView.ViewHolder{
         textViewDescription.setText(jobOffer.description);
 
     }
+
+
 }
