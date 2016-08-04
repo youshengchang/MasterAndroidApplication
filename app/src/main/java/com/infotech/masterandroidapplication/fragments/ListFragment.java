@@ -72,7 +72,7 @@ public class ListFragment extends android.support.v4.app.Fragment {
 
         mAdapter = new FirebaseRecyclerAdapter<JobOffer, MyViewHolder>(JobOffer.class, R.layout.row_job_offer, MyViewHolder.class, query) {
             @Override
-            protected void populateViewHolder(MyViewHolder viewHolder, JobOffer model, final int position) {
+            protected void populateViewHolder(MyViewHolder viewHolder, final JobOffer model, final int position) {
                 final DatabaseReference jobRef = getRef(position);
                 final String key = jobRef.getKey();
                 Log.i("JOB", "populateViewHolder(): position: " + position + " model: " + model.toString() + " key: " + key);
@@ -86,12 +86,15 @@ public class ListFragment extends android.support.v4.app.Fragment {
                         Intent intent = new Intent(getContext(), OfferDetailActivity.class);
                         TextView titleView = (TextView)v.findViewById(R.id.rowJobOfferTitle);
                         TextView descView =(TextView)v.findViewById(R.id.rowJobOfferDesc);
+                        TextView imageLinkView = (TextView)v.findViewById(R.id.rowJobOfferImageLink);
                         String title = titleView.getText().toString();
                         String desc = descView.getText().toString();
+                        String link = imageLinkView.getText().toString();
                         //JobOffer jobOffer = mOfferList.get(position);
-                        Log.i("JOB", "title: " + title + " desc: " + desc);
+                        Log.i("JOB", "title: " + title + " desc: " + desc + " imageLink: " + link);
                         intent.putExtra("job_title", title);
                         intent.putExtra("job_description", desc);
+                        intent.putExtra("job_image", link);
                         getContext().startActivity(intent);
 
                     }
